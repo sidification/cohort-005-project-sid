@@ -49,10 +49,7 @@ import { data, isRouteErrorResponse } from "react-router";
 import { formatDuration, formatPrice } from "~/lib/utils";
 import { renderMarkdown } from "~/lib/markdown.server";
 import { resolveCountry } from "~/lib/country.server";
-import {
-  calculatePppPrice,
-  getCountryTierInfo,
-} from "~/lib/ppp";
+import { calculatePppPrice, getCountryTierInfo } from "~/lib/ppp";
 import { parseFormData } from "~/lib/validation";
 import { MAX_RATING, MIN_RATING } from "~/lib/ratings";
 import { StarRating, StarRatingInput } from "~/components/star-rating";
@@ -306,7 +303,10 @@ function findRating(userId: number, courseId: number) {
     .select()
     .from(courseRatings)
     .where(
-      and(eq(courseRatings.userId, userId), eq(courseRatings.courseId, courseId))
+      and(
+        eq(courseRatings.userId, userId),
+        eq(courseRatings.courseId, courseId)
+      )
     )
     .get();
 }
@@ -1012,8 +1012,9 @@ function RequestRefund({ slug, amount }: { slug: string; amount: number }) {
     <div className="border-t pt-4">
       <p className="mb-2 text-sm font-medium">Request a refund</p>
       <p className="mb-3 text-xs text-muted-foreground">
-        We will send {formatPrice(amount)} back to the card you paid with, once
-        someone has read your note.
+        If someone on our team approves your request, we will refund{" "}
+        {formatPrice(amount)} to the card you paid with and your access to this
+        course will end.
       </p>
       <fetcher.Form
         method="post"

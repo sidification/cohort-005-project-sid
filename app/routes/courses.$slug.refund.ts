@@ -194,9 +194,12 @@ export async function action({ params, request }: Route.ActionArgs) {
   }
 
   if (watchedSeconds >= MAX_WATCHED_HOURS * 60 * 60) {
-    throw data("You have watched too much of this course to request a refund.", {
-      status: 403,
-    });
+    throw data(
+      "You have watched too much of this course to request a refund.",
+      {
+        status: 403,
+      }
+    );
   }
 
   const formData = await request.formData();
@@ -206,8 +209,7 @@ export async function action({ params, request }: Route.ActionArgs) {
     return data({ errors: parsed.errors }, { status: 400 });
   }
 
-  db
-    .insert(refunds)
+  db.insert(refunds)
     .values({
       purchaseId: purchase.id,
       status: RefundStatus.Open,
@@ -223,9 +225,7 @@ export async function action({ params, request }: Route.ActionArgs) {
     amount: purchase.amountPaid,
   });
 
-  console.log(
-    `[email] to=${email.to} subject=${email.subject}\n${email.body}`
-  );
+  console.log(`[email] to=${email.to} subject=${email.subject}\n${email.body}`);
 
   return redirect("/settings");
 }
